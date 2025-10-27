@@ -1,5 +1,19 @@
-# LLM_from_root
-Build a Large Language Model from Scrach
+from importlib.metadata import version
+import tiktoken
+
+#print("tiktoken version:",version("tiktoken"))
+tokenizer=tiktoken.get_encoding("gpt2")
+
+text=(
+   "This is a cryptocurrency ranking dashboard built with Next.js 15.2.4 and React 19.<|endoftext|>"
+   " It displays information about the top cryptocurrencies including price, market cap, volume, and 24h change.<|endoftext|>"
+   " Currently uses mock data; real-time API integration is planned."
+)
+integers=tokenizer.encode(text,allowed_special={"<|endoftext|>"})
+#print(integers)
+strings=tokenizer.decode(integers)
+print(strings)
+"""
 Byte Pair Encoding (BPE):
 가장 자주 나오는 문자 쌍을 반복적으로 병합하여 vocabulary를 만드는 토큰화 알고리즘입니다.
 동작 원리:
@@ -41,4 +55,5 @@ GPT-2/3/4: BPE 사용
 BERT: WordPiece (BPE 변형)
 LLaMA: SentencePiece (BPE 기반)
 
-핵심: 자주 나오는 패턴을 학습하여 모든 단어를 표현 가능한 최소 vocabulary 생성.
+핵심: 자주 나오는 패턴을 학습하여 모든 단어를 표현 가능한 최소 vocabulary 생성
+"""
