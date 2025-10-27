@@ -16,8 +16,13 @@ except FileNotFoundError:
 all_works=sorted(set(token))
 vocab_size=len(all_works)
 #print(vocab_size)
+
 vocab={token:integer for integer,token in enumerate(all_works)}
 # for k,item in enumerate(vocab.items()):
 #    print(item)
 #    if k>=50:
 #       break
+
+# ✅ 특수 토큰 추가
+vocab['<|endoftext|>'] = len(vocab)
+vocab['<|unk|>'] = len(vocab)
