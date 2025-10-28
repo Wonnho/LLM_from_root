@@ -55,3 +55,49 @@ dataloader=create_dataloader_v1(raw_text,batch_size=1,man_length=4,stride=1,shuf
 data_iter=iter(dataloader)
 first_batch=next(data_iter)
 print(first_batch)
+
+second_batch=next(data_iter)
+print(second_batch)
+
+print('====batch size increases 1 to 8====')
+dataloader=create_dataloader_v1(raw_text,batch_size=8,man_length=4,stride=4,shuffle=False)
+
+data_iter=iter(dataloader)
+inputs,targets=next(data_iter)
+print("input:\n",inputs)
+print("target:\n",targets)
+
+"""
+why increase stride=1 to 4 diminishes overfitting?
+
+Stride와 Overfitting 관계:
+Stride = 1 (높은 중복):
+텍스트: [A, B, C, D, E, F, G, H]
+max_length = 4, stride = 1
+
+Window 1: [A, B, C, D]
+Window 2: [B, C, D, E]  ← A,B,C,D 중 B,C,D 재사용
+Window 3: [C, D, E, F]  ← B,C,D,E 중 C,D,E 재사용
+Window 4: [D, E, F, G]  ← C,D,E,F 중 D,E,F 재사용
+Window 5: [E, F, G, H]
+
+중복률: 75% (4개 중 3개 중복)
+```
+
+**Stride = 4 (중복 없음)**:
+```
+텍스트: [A, B, C, D, E, F, G, H]
+max_length = 4, stride = 4
+
+Window 1: [A, B, C, D]
+Window 2: [E, F, G, H]  ← 완전히 새로운 데이터
+
+중복률: 0%
+Overfitting 감소 이유:
+Stride    중복 문제 효과
+1    높음 모델이 같은 패턴 반복 학습 → 암기  Overfitting
+4    없음 모델이 독립적인 패턴 학습 → 일반화 Generalization
+결론: Stride ↑ → 중복 ↓ → 데이터 다양성 ↑ → Overfitting ↓
+Trade-off: Stride가 너무 크면 학습 데이터가 줄어듭니다 (8개 → 2개)
+
+"""
