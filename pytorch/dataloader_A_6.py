@@ -38,7 +38,7 @@ test_ds=ToyDataset(X_test,y_test)
 print('length:',len(train_ds))
 print('return an index,1:',train_ds[1]) 
 
-from pytorch.utils.data import DataLoader
+from torch.utils.data import DataLoader
 torch.manual_seed(123)
 
 train_loader=DataLoader(
@@ -60,7 +60,7 @@ for idx,(x,y) in enumerate(train_loader):
    print(f"batch {idx+1}:",x,y)
 
 import torch.nn.functional as F
-from pytorch.multilayer_perceptron_A_5 import NeuralNetwork
+from pytorch.multilayer_perceptron import NeuralNetwork
 
 torch.manual_seed(123)
 model=NeuralNetwork(num_inputs=2,num_outputs=2)
@@ -69,7 +69,6 @@ optimizer=torch.optim.SGD(
 )
 
 num_epochs=3
-
 for epoch in range(num_epochs):
    model.train()
    for batch_idx,(features,labels) in enumerate(train_loader):
@@ -81,19 +80,6 @@ for epoch in range(num_epochs):
       optimizer.step()
 
       print(f"epoch:{epoch+1:03d}/{num_epochs:03d}"
-      f" | Batch {batch_idx:03d}/{len(train_loader):03d}"  # 괄호 밖으로
-      f" | loss: {loss:.2f}")
-
-model.eval()
-with torch.no_grad():
-   outputs=model(X_train)
-   print(outputs)
-
-torch.set_printoptions(sci_mode=False)
-probas=torch.softmax(outputs,dim=1)
-print("probability:",probas)
-
-predictions=torch.argmax(probas,dim=1)
-print(predictions,'<=predictions')
-
-torch.sum(predictions ==y_train)
+      f" | Batch (batch_idx:03d/{len(train_loader):03d})"
+      f" | loss :{loss:2f}")
+   model.eval()

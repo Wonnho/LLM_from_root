@@ -2,10 +2,10 @@ import tiktoken
 from .data_loader_2_5 import GPTDatasetV1 # " . => 현재 패키지 내부의 data_loader_2_5 모듈에서 가져와라"
 from torch.utils.data import Dataset,DataLoader
 
-def create_dataloader_v1(txt,batch_size=4,man_length=256,stride=128,
+def create_dataloader_v1(txt,batch_size=4,max_length=256,stride=128,
                             shuffle=True,drop_last=True,num_workers=0):
      tokenizer=tiktoken.get_encoding("gpt2") 
-     dataset=GPTDatasetV1(txt,tokenizer,man_length,stride)
+     dataset=GPTDatasetV1(txt,tokenizer,max_length,stride)
      dataloader=DataLoader(dataset,batch_size=batch_size,shuffle=shuffle,
                               drop_last=drop_last,num_workers=num_workers)
      return dataloader
@@ -23,7 +23,7 @@ num_workers=0: 데이터 로딩 병렬 프로세스 수
 
 
 Step 1: 토크나이저 로드
-pythontokenizer = tiktoken.get_encoding("gpt-2")
+pythontokenizer = tiktoken.et_encoding("gpt-2")
 
 OpenAI의 GPT-2 BPE 토크나이저 가져오기
 어휘 크기: 50,257개 토큰
@@ -47,25 +47,26 @@ drop_last=True: 배치 크기 일관성 유지
 
 반환: 학습 루프에서 바로 사용 가능한 DataLoader재시도
 """
+if __name__=='__main__':
+     with open("the-verdict.txt","r",encoding="utf-8") as file:
+          raw_text=file.read()
 
-with open("the-verdict.txt","r",encoding="utf-8") as file:
-     raw_text=file.read()
-dataloader=create_dataloader_v1(raw_text,batch_size=1,man_length=4,stride=1,shuffle=False)
+     dataloader=create_dataloader_v1(raw_text,batch_size=1,max_length=4,stride=1,shuffle=False)
 
-data_iter=iter(dataloader)
-first_batch=next(data_iter)
-print(first_batch)
+     data_iter=iter(dataloader)
+     first_batch=next(data_iter)
+     print(first_batch)
 
-second_batch=next(data_iter)
-print(second_batch)
+     second_batch=next(data_iter)
+     print(second_batch)
 
-print('====batch size increases 1 to 8====')
-dataloader=create_dataloader_v1(raw_text,batch_size=8,man_length=4,stride=4,shuffle=False)
+     print('====batch size increases 1 to 8====')
+     dataloader=create_dataloader_v1(raw_text,batch_size=8,man_length=4,stride=4,shuffle=False)
 
-data_iter=iter(dataloader)
-inputs,targets=next(data_iter)
-print("input:\n",inputs)
-print("target:\n",targets)
+     data_iter=iter(dataloader)
+     inputs,targets=next(data_iter)
+     print("input:\n",inputs)
+     print("target:\n",targets)
 
 """
 why increase stride=1 to 4 diminishes overfitting?
