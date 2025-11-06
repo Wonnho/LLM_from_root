@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-class SelfAttention_v1(nn.Module):
+class SelfAttention_V1(nn.Module):
    def __init__(self,d_in,d_out):
       super().__init__()
       self.W_query=nn.Parameter(torch.rand(d_in,d_out))
@@ -35,7 +35,7 @@ d_in = inputs.shape[1]  # input dimension = 3
 d_out = 2  # output dimension (you can choose any value)
 
 torch.manual_seed(123)
-self_v1=SelfAttention_v1(d_in,d_out)
+self_v1=SelfAttention_V1(d_in,d_out)
 print(self_v1(inputs))
 
       
